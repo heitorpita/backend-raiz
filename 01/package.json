@@ -1,0 +1,12 @@
+{
+  "name": "aula01",
+  "version": "1.0.0",
+  "description": "Aula 01 - Introdução ao desenvolvimento back-end",
+  "license": "ISC",
+  "author": "Joel Santos",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
