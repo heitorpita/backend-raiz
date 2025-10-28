@@ -56,13 +56,13 @@ static listar(req, res){
                 nome: nome,
                 telefone: telefone,
                 cep: cep,
-                rua: buscaCep.logradouro,
+                rua: buscaCep.data.logradouro,
                 numero: numero,
-                bairo: buscaCep.bairo,
-                cidade: buscaCep.cidade,
-                estado: buscaCep.estado,
+                bairro: buscaCep.data.bairro,
+                cidade: buscaCep.data.localidade,
+                estado: buscaCep.data.uf,
             }
-            const userCriado = UsuarioModel(novoUsuario);
+            const userCriado = UsuarioModel.criar(novoUsuario);
             res.status(201).json({msg: "usuario criado", novoUsuario})
 
         } catch (error) {
