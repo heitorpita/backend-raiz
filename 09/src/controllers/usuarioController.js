@@ -70,4 +70,58 @@ static listar(req, res){
         }
     }
 
+
+    static async atualizar(req, res){
+        try {
+            const id = req.params.id;
+            const usuarioExistente = UsuarioModel.buscarPorId(id);
+            if (!usuarioExistente) {
+                res.status(400).json({msg: "usuario nao encontrado"})
+                return;
+            }   
+            const { nome, cep, numero, telefone } = req.body;
+
+            if ( !nome || !cep || !numero || !telefone){
+                res.status(400).json({msg: "todos os campos devem ser preenchidos"})
+                return;
+            }
+            const buscaCep = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+            if(buscaCep.erro){
+                res.status(400).json({msg: "CEP INVALIDO!"})
+                return;
+            }
+            const usuarioAtualizado = {
+                
+                nome: nome,
+                telefone: telefone,
+                cep: cep,
+                rua: buscaCep.data.logradouro,      
+                numero: numero,
+                bairro: buscaCep.data.bairro,
+                cidade: buscaCep.data.localidade,
+                estado: buscaCep.data.uf,
+            }
+            UsuarioModel.atualizar(id, usuarioAtualizado);
+            res.status(200).json({msg: "usuario atualizado", usuarioAtualizado})
+        } catch (error) {
+            res.status(500).json({ msg: "Erro interno", erro: error.message });
+        }
+    }
+
+    static deletar(req, res){
+        try {
+            const id = req.params.id;
+            const usuarioExistente = UsuarioModel.buscarPorId(id);
+            if (!usuarioExistente) {
+                res.status(400).json({msg: "usuario nao encontrado"})
+                return;
+            }
+            UsuarioModel.deletar(id);
+            res.status(200).json({msg: "usuario deletado"})
+        } catch (error) {
+            res.status(500).json({ msg: "Erro interno", erro: error.message });
+        }   
+    }
+
+
 }
